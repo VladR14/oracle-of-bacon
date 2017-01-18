@@ -22,6 +22,9 @@ public class APIEndPoint {
     }
     @Get("bacon-to?actor=:actorName")
     public String getConnectionsToKevinBacon(String actorName) {
+        // Save the name of the researched Actor
+        redisRepository.addActorToLastTen(actorName);
+        //concatenation
         List<?> l = neo4JRepository.getConnectionsToKevinBacon(actorName);
         String result = "[";
         for (int i =0; i< l.size()-1;i++)result += l.get(i) + ", ";
@@ -32,6 +35,7 @@ public class APIEndPoint {
 
     @Get("suggest?q=:searchQuery")
     public List<String> getActorSuggestion(String searchQuery) {
+
         return Arrays.asList("Niro, Chel",
                 "Senanayake, Niro",
                 "Niro, Juan Carlos",
@@ -40,11 +44,14 @@ public class APIEndPoint {
     }
     @Get("last-searches")
     public List<String> last10Searches() {
-        return Arrays.asList("Peckinpah, Sam",
+        return redisRepository.getLastTenSearches();
+
+
+                /*Arrays.asList("Peckinpah, Sam",
                 "Robbins, Tim (I)",
                 "Freeman, Morgan (I)",
                 "De Niro, Robert",
-                "Pacino, Al (I)");
+                "Pacino, Al (I)");*/
     }
     @Get("actor?name=:actorName")
     public String getActorByName(String actorName) {

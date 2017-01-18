@@ -14,13 +14,14 @@ public class Neo4JRepository {
     public Neo4JRepository() {
         driver = GraphDatabase.driver("bolt://localhost:7687", AuthTokens.basic("neo4j", "password"));
     }
+    //create the String List that represent the connections to kevin bacon
     public List<String> getConnectionsToKevinBacon(String actorName) {
         Session session = driver.session();
         List<GraphItem> listResult = new ArrayList<GraphItem>();
         StatementResult result = session.run(
                 "MATCH (Bacon:Actors {name:'Bacon, Kevin (I)'}), (Target:Actors {name:'"+
                         actorName +
-                        "'}), p = shortestPath((Bacon)-[*]-(Target)) RETURN nodes(p) as nodes, relationships(p) as relations\n" );
+                        "'}), p = shortestPath((Bacon)-[*]-(Target)) RETURN nodes(p) as nodes, relationships(p) as relations" );
         session.close();
 
         while ( result.hasNext() )
@@ -49,6 +50,7 @@ public class Neo4JRepository {
         }
         return listReturned;
     }
+    //create Edge or Node
     private String transform(GraphItem g){
         String res = "";
         if (g instanceof GraphEdge){
